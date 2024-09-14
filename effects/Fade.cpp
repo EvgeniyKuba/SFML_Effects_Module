@@ -39,7 +39,6 @@ void Fade::update() {
             }
         }
 
-        // Apply the alpha channel to the sprite
         sprite->setColor(sf::Color(255, 255, 255, alpha));
     }
 }
