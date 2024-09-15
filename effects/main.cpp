@@ -1,38 +1,36 @@
 #include <SFML/Graphics.hpp>
-#include "Fade.h"
+#include "Particle.h"
 
-int main() {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Fade Effect Example");
+int main()
+{
+    sf::RenderWindow window(sf::VideoMode(800, 600), "Particles");
 
-    sf::Texture texture1;
-    texture1.loadFromFile("1.png");
+    Particles particles;
+    particles.setTexture("4.png"); 
 
-    sf::Sprite* sprite1 = new sf::Sprite(texture1);
-    Fade fade1(sprite1);
+    sf::Clock clock;
+    sf::Time dt;
 
-    sprite1->setPosition(200, 200);
-    sprite1->setColor(sf::Color(255, 255, 255, 0));
-
-
-    while (window.isOpen()) {
+    while (window.isOpen())
+    {
         sf::Event event;
-        while (window.pollEvent(event)) {
+        while (window.pollEvent(event))
+        {
             if (event.type == sf::Event::Closed)
+            {
                 window.close();
+            }
 
-            if (event.type == sf::Event::KeyPressed) {
-                if (event.key.code == sf::Keyboard::Num1) {
-                    fade1.startFadeIn(1.0f);
-                }
-                else if (event.key.code == sf::Keyboard::Num2) {
-                    fade1.startFadeOut(1.0f);
-                }
+            if (event.type == sf::Event::KeyPressed)
+            {
+                particles.generateParticles(200, 200, 8, 50.f, 1.0f, 10.f, 0.5f, 0.5f); //X, Y, количество , размер, длительность жизни, скорость, fadeOut, fadeIn
             }
         }
 
+        dt = clock.restart();
+        particles.update(dt.asSeconds());
         window.clear();
-        fade1.update();
-        window.draw(*fade1.getSprite());
+        particles.draw(window);
         window.display();
     }
 
